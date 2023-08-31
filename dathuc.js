@@ -3,6 +3,7 @@ var bac_dt1 = [];
 
 var heso_dt2 = [];
 var bac_dt2 = [];
+var filecontent = "";
 
 function randomArray(length, minValue, maxValue) {
     const uniqueArray = [];
@@ -11,7 +12,7 @@ function randomArray(length, minValue, maxValue) {
         // Hàm random trong khoảng minmax: https://www.w3schools.com/js/js_random.asp 
       const randomNumber = Math.floor(Math.random() * (maxValue - minValue)) + parseInt(minValue);
       
-      if (!uniqueArray.includes(randomNumber)) {
+      if (!uniqueArray.includes(randomNumber) && randomNumber != 0) {
         uniqueArray.push(randomNumber);
       }
     }
@@ -42,14 +43,10 @@ function KhoiTaoDaThuc(){
 function VeDaThuc(array_bac, array_heso, length){
     let string_dathuc = ""
     for (let i = 0; i < length; i++) {
-        if(array_heso[i] != 0){
-            if(array_heso[i]>0){
-                string_dathuc += "+"+array_heso[i]
-            }else{
-                string_dathuc+=array_heso[i]
-            }
+        if(array_heso[i]>0){
+            string_dathuc += "+"+array_heso[i]
         }else{
-            string_dathuc += "+"
+            string_dathuc+=array_heso[i]
         }
             
         if(array_bac[i] != 0){
@@ -58,6 +55,84 @@ function VeDaThuc(array_bac, array_heso, length){
 
     }
     return string_dathuc
+}
+
+function ExportTxt(){
+    let dt1 = StringDT(bac_dt1,heso_dt1)
+    let dt2 = StringDT(bac_dt2,heso_dt2)
+
+    let dathucChuoi = dt1 + "\n" + dt2
+
+    const blob = new Blob([dathucChuoi], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'dathuc.txt';
+    a.click();
+}
+
+function StringDT(array_bac, array_heso) {
+    let string_dathuc = "";
+
+    for (let i = 0; i < array_heso.length; i++) {
+        if (array_heso[i] != 0) {
+            if (i != 0) {
+                string_dathuc = string_dathuc.concat("+");
+            }
+            if (array_bac[i] == 0) {
+                string_dathuc = string_dathuc.concat(array_heso[i]);
+            } else {
+                string_dathuc = string_dathuc.concat("("+array_heso[i] + "x" + (array_bac[i] != 0 ? "^" + array_bac[i] : "")+")");
+            }
+        }
+    }
+
+    return string_dathuc;
+}
+
+function tachChuoiThanhMang(chuoiDathuc) {
+    const array_bac = [];
+    const array_heso = [];
+    const donthuc_array = chuoiDathuc.split('+');
+    console.log(donthuc_array)
+    for(const donthuc of donthuc_array) {
+        let temp = donthuc.match(/(-?\d*)x\^(-?\d*)/);
+        if(temp == null){
+            array_heso.push(parseInt(donthuc));
+            array_bac.push(0);
+        }else{
+            array_heso.push(parseInt(temp[1]));
+            array_bac.push(parseInt(temp[2]));
+        }
+    }
+    return { array_heso, array_bac };
+}
+
+function docFile() {
+    const file = document.getElementById('importFile').files[0];
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        filecontent = e.target.result;
+        generateFromFile(filecontent)
+    };
+    reader.readAsText(file);
+};
+
+function generateFromFile(content) {
+    content = content.split('\n')
+    let tachdt1 = tachChuoiThanhMang(content[0])
+    let tachdt2 = tachChuoiThanhMang(content[1])
+
+    heso_dt1 = tachdt1['array_heso'];
+    bac_dt1 = tachdt1['array_bac'];
+    const string_dt1 = VeDaThuc(bac_dt1, heso_dt1, heso_dt1.length)
+    document.getElementById("dathuc1").innerHTML = string_dt1
+
+
+    heso_dt2 = tachdt2['array_heso'];
+    bac_dt2 = tachdt2['array_bac'];
+    const string_dt2 = VeDaThuc(bac_dt2, heso_dt2, heso_dt2.length)
+    document.getElementById("dathuc2").innerHTML = string_dt2
 }
 
 

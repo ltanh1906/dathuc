@@ -80,7 +80,7 @@
         </div>
         <div class="form-row align-items-center mt-2">
             <div class="col-auto">
-                <input type="file" class="custom-file-input" id="validatedCustomFile" required>
+                <input type="file" class="custom-file-input" id="importFile" onchange="docFile()">
                 <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
                 <div class="invalid-feedback">Example invalid custom file feedback</div>
             </div>
@@ -89,6 +89,7 @@
                 <button type="button" class="btn btn-outline-secondary ml-2" onclick="LinkedList()">Linked List</button>
                 <button type="button" class="btn btn-outline-success ml-2" onclick="Heap()">Heap</button>
                 <button type="button" class="btn btn-outline-danger ml-2" onclick="HashTable()">Hash Table</button>
+                <button type="button" class="btn btn-outline-danger ml-2" onclick="ExportTxt()">Export txt</button>
             </div>
             
         </div>
