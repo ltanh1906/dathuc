@@ -1,8 +1,10 @@
 var heso_dt1 = [];
 var bac_dt1 = [];
-
 var heso_dt2 = [];
 var bac_dt2 = [];
+
+var heso_ketqua = [];
+var bac_ketqua = [];
 var filecontent = "";
 
 function randomArray(length, minValue, maxValue) {
@@ -60,8 +62,9 @@ function VeDaThuc(array_bac, array_heso, length){
 function ExportTxt(){
     let dt1 = StringDT(bac_dt1,heso_dt1)
     let dt2 = StringDT(bac_dt2,heso_dt2)
+    let result = StringDT(bac_ketqua,heso_ketqua)
 
-    let dathucChuoi = dt1 + "\n" + dt2
+    let dathucChuoi = dt1 + "\n" + dt2+ "\n" + result
 
     const blob = new Blob([dathucChuoi], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
@@ -158,6 +161,31 @@ function Heap(){
 
 }
 
+// Sử dụng bảng băm..........................
+class DaThucHashTable {
+    constructor() {
+        this.table = {};
+    }
+
+    // Thêm một đơn thức
+    addDonThuc(bac, heso) {
+        if (bac in this.table) {
+            this.table[bac] += heso;
+        } else {
+            this.table[bac] = heso;
+        }
+    }
+
+    tachKetqua(){
+        for (const bac in this.table) {
+            const heso = this.table[bac];
+            heso_ketqua.push(parseInt(heso));
+            bac_ketqua.push(bac);
+        }
+    }
+    
+}
+
 function HashTable(){
     let hashtbl_hs1 = heso_dt1
     let hashtbl_bac1 = bac_dt1
@@ -165,5 +193,18 @@ function HashTable(){
     let hashtbl_hs2 = heso_dt2
     let hashtbl_bac2 = bac_dt2
 
+    const resultHashtable = new DaThucHashTable()
+    for(let i = 0; i <hashtbl_hs1.length; i++){
+        resultHashtable.addDonThuc(hashtbl_bac1[i], hashtbl_hs1[i])
+    }
+    for(let i = 0; i <hashtbl_hs2.length; i++){
+        resultHashtable.addDonThuc(hashtbl_bac2[i], hashtbl_hs2[i])
+    }
 
+    // Tách bảng kết quả thành 2 mảng để hiển thị và ghi file
+    resultHashtable.tachKetqua();
+    // console.log(heso_ketqua);
+    // console.log(bac_ketqua);
+    let str_kq = VeDaThuc(bac_ketqua, heso_ketqua, heso_ketqua.length)
+    document.getElementById("dathuc_ketqua").innerHTML = str_kq
 }
