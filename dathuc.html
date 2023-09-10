@@ -9,6 +9,24 @@
     <script src="js/bootstrap.min.js">
     </script>
     <script src="dathuc.js"></script>
+    <style>
+        tr td{
+            border:  1px solid black;
+        }
+        td{
+            padding: 10px 50px;
+            text-align:center;
+        }
+        .high-light td{
+            border: 1px solid red;
+            font-weight: bold;
+            color: red;
+        }
+        .high-light{
+            border: 1px solid red
+        }
+    </style>
+
 </head>
 
 <body>
@@ -81,23 +99,41 @@
                 <button type="button" class="btn btn-outline-secondary ml-2" onclick="LinkedList()">Linked List</button>
                 <button type="button" class="btn btn-outline-success ml-2" onclick="Heap()">Heap</button>
                 <button type="button" class="btn btn-outline-danger ml-2" onclick="HashTable()">Hash Table</button>
+                <button type="button" class="btn btn-outline-danger ml-2" onclick="ReplayHashTable()">Replay Hash Table</button>
                 <button type="button" class="btn btn-outline-danger ml-2" onclick="ExportTxt()">Export txt</button>
             </div>
             
         </div>
-        <div class="form-row align-items-center mt-2">
-            <div id="dathuc1" style="font-size: 48pt;">
+        <div class="row">
+            <div class=" col-lg-9">
+                <div class="form-row align-items-center mt-2">
+                    <div id="dathuc1" style="font-size: 48pt;">
+                    </div>
+                </div>
+                <div class="form-row align-items-center mt-2">
+                    <div id="dathuc2" style="font-size: 48pt;">
+                    </div>
+                </div>
+                <div class="form-row align-items-center mt-2" style="border-top: 1px solid black;">
+                    <div id="dathuc_ketqua" style="font-size: 48pt;">
+                    </div>
+                </div>
+            </div>
+            <div class=" col-lg-3">
+                <table>
+                    <tbody id="result-table">
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                        </tr>
+                        <!-- <tr class="high-light">
+                            <td class="key" id="key">0</td>
+                            <td class="value" id="value">12</td>
+                        </tr> -->
+                    </tbody>
+                </table>
             </div>
         </div>
-        <div class="form-row align-items-center mt-2">
-            <div id="dathuc2" style="font-size: 48pt;">
-            </div>
-        </div>
-        <div class="form-row align-items-center mt-2" style="border-top: 1px solid black;">
-            <div id="dathuc_ketqua" style="font-size: 48pt;">
-            </div>
-        </div>
-
     </div>
 </body>
 

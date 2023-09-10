@@ -160,8 +160,13 @@ function Heap(){
     let heap_bac2 = bac_dt2
 
 }
+// funtion Sleep tham khao https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep
+function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 // Sử dụng bảng băm..........................
+
 class DaThucHashTable {
     constructor() {
         this.table = {};
@@ -174,6 +179,14 @@ class DaThucHashTable {
         } else {
             this.table[bac] = heso;
         }
+
+        // if(this.table[bac]){
+        //     this.table[bac] += heso;
+        // } else {
+        //     this.table[bac] = heso;
+        // }
+
+
     }
 
     tachKetqua(){
@@ -193,18 +206,84 @@ function HashTable(){
     let hashtbl_hs2 = heso_dt2
     let hashtbl_bac2 = bac_dt2
 
-    const resultHashtable = new DaThucHashTable()
+    var start = performance.now()
+    var resultHashtable = new DaThucHashTable()
     for(let i = 0; i <hashtbl_hs1.length; i++){
         resultHashtable.addDonThuc(hashtbl_bac1[i], hashtbl_hs1[i])
+        // await sleep(1000)
     }
     for(let i = 0; i <hashtbl_hs2.length; i++){
         resultHashtable.addDonThuc(hashtbl_bac2[i], hashtbl_hs2[i])
     }
-
-    // Tách bảng kết quả thành 2 mảng để hiển thị và ghi file
+    var end = performance.now()
+    console.log(end-start);
     resultHashtable.tachKetqua();
-    // console.log(heso_ketqua);
-    // console.log(bac_ketqua);
     let str_kq = VeDaThuc(bac_ketqua, heso_ketqua, heso_ketqua.length)
     document.getElementById("dathuc_ketqua").innerHTML = str_kq
+}
+
+async function ReplayHashTable(){
+    
+    let hashtbl_hs1 = heso_dt1
+    let hashtbl_bac1 = bac_dt1
+
+    let hashtbl_hs2 = heso_dt2
+    let hashtbl_bac2 = bac_dt2
+
+    for(let i = 0; i <hashtbl_hs1.length; i++){
+        let heso = hashtbl_hs1[i]
+        let bac = hashtbl_bac1[i]
+        console.log(resultHashtable[bac])
+        console.log(heso)
+        console.log("-------")
+        if (resultHashtable[bac]) {
+            document.getElementById(`bac_${bac}`).classList.add("high-light")
+            await sleep(1000)
+            if(heso < 0){
+                document.getElementById(`heso_bac${bac}`).innerHTML += heso
+            }else{
+                document.getElementById(`heso_bac${bac}`).innerHTML += "+" + heso
+            }
+            await sleep(1000)
+            document.getElementById(`bac_${bac}`).classList.remove("high-light")
+        } else {
+            let html = `
+                <tr id="bac_${bac}" class="high-light">
+                    <td class="${bac}" >${bac}</td>
+                    <td class="${heso}" id="heso_bac${bac}">${heso}</td>
+                </tr>
+            `
+            document.getElementById("result-table").innerHTML += html
+            await sleep(1000)
+            document.getElementById(`bac_${bac}`).classList.remove("high-light")
+        }
+        await sleep(1000)
+    }
+    for(let i = 0; i <hashtbl_hs2.length; i++){
+        let heso = hashtbl_hs2[i]
+        let bac = hashtbl_bac2[i]
+        if (resultHashtable[bac]) {
+            document.getElementById(`bac_${bac}`).classList.add("high-light")
+            await sleep(1000)
+            if(heso < 0){
+                document.getElementById(`heso_bac${bac}`).innerHTML += heso
+            }else{
+                document.getElementById(`heso_bac${bac}`).innerHTML += "+" + heso
+            }
+            await sleep(1000)
+            document.getElementById(`bac_${bac}`).classList.remove("high-light")
+        } else {
+            let html = `
+                <tr id="bac_${bac}" class="high-light">
+                    <td class="${bac}" >${bac}</td>
+                    <td class="${heso}" id="heso_bac${bac}">${heso}</td>
+                </tr>
+            `
+            document.getElementById("result-table").innerHTML += html
+            await sleep(1000)
+            document.getElementById(`bac_${bac}`).classList.remove("high-light")
+        }
+        await sleep(1000)
+    }
+
 }
