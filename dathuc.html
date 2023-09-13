@@ -25,6 +25,11 @@
         .high-light{
             border: 1px solid red
         }
+        #log-table td{
+            padding: 10px 0px;
+            text-align:left;
+            border:  none
+        }
     </style>
 
 </head>
@@ -104,35 +109,49 @@
             </div>
             
         </div>
-        <div class="row">
-            <div class=" col-lg-9">
-                <div class="form-row align-items-center mt-2">
-                    <div id="dathuc1" style="font-size: 48pt;">
-                    </div>
-                </div>
-                <div class="form-row align-items-center mt-2">
-                    <div id="dathuc2" style="font-size: 48pt;">
-                    </div>
-                </div>
-                <div class="form-row align-items-center mt-2" style="border-top: 1px solid black;">
-                    <div id="dathuc_ketqua" style="font-size: 48pt;">
-                    </div>
+        
+    </div>
+    <div class="row">
+        <div class=" col-lg-8">
+            <div class="form-row align-items-center mt-2">
+                <div id="dathuc1" style="font-size: 48pt;">
                 </div>
             </div>
-            <div class=" col-lg-3">
-                <table>
-                    <tbody id="result-table">
-                        <tr>
-                            <th>Key</th>
-                            <th>Value</th>
-                        </tr>
-                        <!-- <tr class="high-light">
-                            <td class="key" id="key">0</td>
-                            <td class="value" id="value">12</td>
-                        </tr> -->
-                    </tbody>
-                </table>
+            <div class="form-row align-items-center mt-2">
+                <div id="dathuc2" style="font-size: 48pt;">
+                </div>
             </div>
+            <div class="form-row align-items-center mt-2" style="border-top: 1px solid black;">
+                <div id="dathuc_ketqua" style="font-size: 48pt;">
+                </div>
+            </div>
+        </div>
+        <div class=" col-lg-2">
+            <table>
+                <tbody id="result-table">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    <!-- <tr class="high-light">
+                        <td class="key" id="key">0</td>
+                        <td class="value" id="value">12</td>
+                    </tr> -->
+                </tbody>
+            </table>
+        </div>
+        <div class=" col-lg-2">
+            <table>
+                <tbody id="log-table">
+                    <tr>
+                        <th>Log</th>
+                    </tr>
+                    <!-- <tr class="high-light">
+                        <td class="key" id="key">0</td>
+                        <td class="value" id="value">12</td>
+                    </tr> -->
+                </tbody>
+            </table>
         </div>
     </div>
 </body>

@@ -166,6 +166,7 @@ function sleep(ms) {
 }
 
 // Sử dụng bảng băm..........................
+var replay = []
 
 class DaThucHashTable {
     constructor() {
@@ -174,11 +175,19 @@ class DaThucHashTable {
 
     // Thêm một đơn thức
     addDonThuc(bac, heso) {
+        let solution = {};
         if (bac in this.table) {
             this.table[bac] += heso;
+            solution["bac"] = bac;
+            solution["heso"] = heso;
+            solution["action"] = "edit"
         } else {
             this.table[bac] = heso;
+            solution["bac"] = bac;
+            solution["heso"] = heso;
+            solution["action"] = "add"
         }
+        replay.push(solution);
 
         // if(this.table[bac]){
         //     this.table[bac] += heso;
@@ -215,6 +224,7 @@ function HashTable(){
     for(let i = 0; i <hashtbl_hs2.length; i++){
         resultHashtable.addDonThuc(hashtbl_bac2[i], hashtbl_hs2[i])
     }
+    console.log(replay)
     var end = performance.now()
     console.log(end-start);
     resultHashtable.tachKetqua();
@@ -223,67 +233,42 @@ function HashTable(){
 }
 
 async function ReplayHashTable(){
-    
-    let hashtbl_hs1 = heso_dt1
-    let hashtbl_bac1 = bac_dt1
 
-    let hashtbl_hs2 = heso_dt2
-    let hashtbl_bac2 = bac_dt2
-
-    for(let i = 0; i <hashtbl_hs1.length; i++){
-        let heso = hashtbl_hs1[i]
-        let bac = hashtbl_bac1[i]
-        console.log(resultHashtable[bac])
-        console.log(heso)
-        console.log("-------")
-        if (resultHashtable[bac]) {
-            document.getElementById(`bac_${bac}`).classList.add("high-light")
-            await sleep(1000)
-            if(heso < 0){
-                document.getElementById(`heso_bac${bac}`).innerHTML += heso
-            }else{
-                document.getElementById(`heso_bac${bac}`).innerHTML += "+" + heso
-            }
-            await sleep(1000)
-            document.getElementById(`bac_${bac}`).classList.remove("high-light")
-        } else {
+    for(let i = 0; i <replay.length; i++){
+        let value = replay[i]
+        console.log(value.action)
+        if(value.action == "add"){
+            WriteLog(`Thêm phần tử key = ${value.bac}; value=${value.heso}`)
             let html = `
-                <tr id="bac_${bac}" class="high-light">
-                    <td class="${bac}" >${bac}</td>
-                    <td class="${heso}" id="heso_bac${bac}">${heso}</td>
+                <tr id="bac_${value.bac}" class="high-light">
+                    <td class="${value.bac}" >${value.bac}</td>
+                    <td class="${value.heso}" id="heso_bac${value.bac}">${value.heso}</td>
                 </tr>
             `
             document.getElementById("result-table").innerHTML += html
             await sleep(1000)
-            document.getElementById(`bac_${bac}`).classList.remove("high-light")
-        }
-        await sleep(1000)
-    }
-    for(let i = 0; i <hashtbl_hs2.length; i++){
-        let heso = hashtbl_hs2[i]
-        let bac = hashtbl_bac2[i]
-        if (resultHashtable[bac]) {
-            document.getElementById(`bac_${bac}`).classList.add("high-light")
+            document.getElementById(`bac_${value.bac}`).classList.remove("high-light")
+        }else{
+            document.getElementById(`bac_${value.bac}`).classList.add("high-light")
             await sleep(1000)
-            if(heso < 0){
-                document.getElementById(`heso_bac${bac}`).innerHTML += heso
+            if(value.heso < 0){
+                document.getElementById(`heso_bac${value.bac}`).innerHTML += value.heso
             }else{
-                document.getElementById(`heso_bac${bac}`).innerHTML += "+" + heso
+                document.getElementById(`heso_bac${value.bac}`).innerHTML += "+" + value.heso
             }
             await sleep(1000)
-            document.getElementById(`bac_${bac}`).classList.remove("high-light")
-        } else {
-            let html = `
-                <tr id="bac_${bac}" class="high-light">
-                    <td class="${bac}" >${bac}</td>
-                    <td class="${heso}" id="heso_bac${bac}">${heso}</td>
-                </tr>
-            `
-            document.getElementById("result-table").innerHTML += html
-            await sleep(1000)
-            document.getElementById(`bac_${bac}`).classList.remove("high-light")
+            document.getElementById(`bac_${value.bac}`).classList.remove("high-light")
         }
         await sleep(1000)
-    }
+    };
 
+}
+
+function WriteLog(text){
+    let html = `
+        <tr>
+            <td>${text}</td>
+        </tr>
+    `
+    document.getElementById("log-table").innerHTML += html
 }
