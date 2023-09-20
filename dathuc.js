@@ -7,7 +7,7 @@ var heso_ketqua = [];
 var bac_ketqua = [];
 var filecontent = "";
 
-function randomArray(length, minValue, maxValue) {
+function randomUniqueArray(length, minValue, maxValue) {
     const uniqueArray = [];
     
     while (uniqueArray.length < length) {
@@ -20,14 +20,26 @@ function randomArray(length, minValue, maxValue) {
     }
     
     return uniqueArray;
-  }
+}
+function randomArray(length, minValue, maxValue) {
+    const randomArray = [];
+    
+    while (randomArray.length < length) {
+        // Hàm random trong khoảng minmax: https://www.w3schools.com/js/js_random.asp 
+      const randomNumber = Math.floor(Math.random() * (maxValue - minValue)) + parseInt(minValue);
+      
+      randomArray.push(randomNumber);
+    }
+    
+    return randomArray;
+}
   
 function KhoiTaoDaThuc(){
     const length_dt1 = document.getElementById("sl1").value
     const min_dt1 = document.getElementById("min1").value
     const max_dt1 = document.getElementById("max1").value
-    heso_dt1 = randomArray(length_dt1, min_dt1, max_dt1)
-    bac_dt1 = randomArray(length_dt1, min_dt1, max_dt1)
+    heso_dt1 = randomUniqueArray(length_dt1, min_dt1, max_dt1)
+    bac_dt1 = randomUniqueArray(length_dt1, min_dt1, max_dt1)
     const string_dt1 = VeDaThuc(bac_dt1, heso_dt1, length_dt1)
     document.getElementById("dathuc1").innerHTML = string_dt1
     
@@ -35,8 +47,8 @@ function KhoiTaoDaThuc(){
     const length_dt2 = document.getElementById("sl2").value
     const min_dt2 = document.getElementById("min2").value
     const max_dt2 = document.getElementById("max2").value
-    heso_dt2 = randomArray(length_dt2, min_dt2, max_dt2)
-    bac_dt2 = randomArray(length_dt2, min_dt2, max_dt2)
+    heso_dt2 = randomUniqueArray(length_dt2, min_dt2, max_dt2)
+    bac_dt2 = randomUniqueArray(length_dt2, min_dt2, max_dt2)
     const string_dt2 = VeDaThuc(bac_dt2, heso_dt2, length_dt2)
     document.getElementById("dathuc2").innerHTML = string_dt2
 
@@ -65,6 +77,22 @@ function ExportTxt(){
     let result = StringDT(bac_ketqua,heso_ketqua)
 
     let dathucChuoi = dt1 + "\n" + dt2+ "\n" + result
+
+    const blob = new Blob([dathucChuoi], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'dathuc.txt';
+    a.click();
+}
+
+function ExportMulti(soluong){
+    let dathucChuoi = ""
+    for(let i=0; i<soluong;i++){
+        let soluongdonthuc = (i+1)*10
+        let dt = StringDT(randomArray(soluongdonthuc,-100000,100000),randomArray(soluongdonthuc,-100000,100000))
+        dathucChuoi += dt + "\n"
+    }
 
     const blob = new Blob([dathucChuoi], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
@@ -117,6 +145,16 @@ function docFile() {
     reader.onload = function (e) {
         filecontent = e.target.result;
         generateFromFile(filecontent)
+    };
+    reader.readAsText(file);
+};
+
+var batch_content = {}
+function docFileBatch(num) {
+    const file = document.getElementById('batch'+num).files[0];
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        batch_content[num] = e.target.result;
     };
     reader.readAsText(file);
 };
@@ -205,6 +243,17 @@ class DaThucHashTable {
             bac_ketqua.push(bac);
         }
     }
+
+    tachKetqua1(){
+        let return_bac = []
+        let return_heso = []
+        for (const bac in this.table) {
+            const heso = this.table[bac];
+            return_heso.push(parseInt(heso));
+            return_bac.push(bac);
+        }
+        return {return_bac, return_heso}
+    }
     
 }
 
@@ -271,4 +320,55 @@ function WriteLog(text){
         </tr>
     `
     document.getElementById("log-table").innerHTML += html
+}
+
+function CaculateBatch(){
+    // console.log(batch_content[1].split("\n"));
+    let file1 = batch_content[1].split("\n")
+    let file2 = batch_content[2].split("\n")
+    let string_result ="";
+    let labels = []
+    let data_chart = []
+    for(let i = 0; i < 100; i++) {
+        let dathuc1 = tachChuoiThanhMang(file1[i])
+        let dathuc2 = tachChuoiThanhMang(file2[i])
+        let soluongdonthuc = (i+1)*10
+        let start = performance.now()
+        let result_batch = new DaThucHashTable();
+        for(let m = 0; m <soluongdonthuc; m++){
+            result_batch.addDonThuc(dathuc1['array_bac'][m], dathuc1['array_heso'][m])
+            // await sleep(1000)
+        }
+        for(let n = 0; n <soluongdonthuc; n++){
+            result_batch.addDonThuc(dathuc2['array_bac'][n], dathuc2['array_heso'][n])
+        }
+        let ketqua = result_batch.tachKetqua1();
+        let end = performance.now()
+        let time_exec = end - start
+        labels.push(soluongdonthuc)
+        data_chart.push(time_exec)
+        string_result += soluongdonthuc+"|"+time_exec+"|"+StringDT(ketqua['return_bac'],ketqua['return_heso'])+"\n"
+    }
+    console.log(string_result);
+
+    const ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+        labels: labels,
+        datasets: [{
+            label: 'Time exec: #s',
+            data: data_chart,
+            borderWidth: 1
+        }]
+        },
+        options: {
+        scales: {
+            y: {
+            beginAtZero: true
+            }
+        }
+        }
+    });
 }

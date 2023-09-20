@@ -9,6 +9,7 @@
     <script src="js/bootstrap.min.js">
     </script>
     <script src="dathuc.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         tr td{
             border:  1px solid black;
@@ -106,8 +107,24 @@
                 <button type="button" class="btn btn-outline-danger ml-2" onclick="HashTable()">Hash Table</button>
                 <button type="button" class="btn btn-outline-danger ml-2" onclick="ReplayHashTable()">Replay Hash Table</button>
                 <button type="button" class="btn btn-outline-danger ml-2" onclick="ExportTxt()">Export txt</button>
+                <button type="button" class="btn btn-outline-danger ml-2" onclick="ExportMulti(100)">Export Batch</button>
             </div>
             
+        </div>
+        <div class="form-row align-items-center mt-2">
+            <div class="col-auto">
+                <input type="file" class="custom-file-input" id="batch1" onchange="docFileBatch(1)">
+                <label class="custom-file-label" for="validatedCustomFile">File 1</label>
+                <div class="invalid-feedback">Example invalid custom file feedback</div>
+            </div>
+            <div class="col-auto ml-2">
+                <input type="file" class="custom-file-input" id="batch2" onchange="docFileBatch(2)">
+                <label class="custom-file-label" for="validatedCustomFile">File 2</label>
+                <div class="invalid-feedback">Example invalid custom file feedback</div>
+            </div>
+            <div class="row ml-2">
+                <button type="button" class="btn btn-outline-primary" id="randomGenerate" onclick="CaculateBatch()">Batch</button>
+            </div>
         </div>
         
     </div>
@@ -153,6 +170,9 @@
                 </tbody>
             </table>
         </div>
+    </div>
+    <div class="row">
+        <canvas id="myChart"></canvas>
     </div>
 </body>
 
