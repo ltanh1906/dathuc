@@ -1,179 +1,284 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <script src="js/bootstrap.min.js">
-    </script>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <script src="js/bootstrap.min.js"></script>
     <script src="dathuc.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        tr td{
-            border:  1px solid black;
-        }
-        td{
-            padding: 10px 50px;
-            text-align:center;
-        }
-        .high-light td{
-            border: 1px solid red;
-            font-weight: bold;
-            color: red;
-        }
-        .high-light{
-            border: 1px solid red
-        }
-        #log-table td{
-            padding: 10px 0px;
-            text-align:left;
-            border:  none
-        }
+      tr td {
+        border: 1px solid black;
+      }
+      td {
+        padding: 10px 50px;
+        text-align: center;
+      }
+      .high-light td {
+        border: 1px solid red;
+        font-weight: bold;
+        color: red;
+      }
+      .high-light {
+        border: 1px solid red;
+      }
+      #log-table td {
+        padding: 10px 0px;
+        text-align: left;
+        border: none;
+      }
     </style>
+  </head>
 
-</head>
-
-<body>
+  <body>
     <div class="container">
-        <div class="form-row align-items-center mt-5">
-            
+      <div class="form-row align-items-center mt-5"></div>
+      <div class="form-row align-items-center mt-2">
+        <span class="badge badge-secondary">Đa thức 1</span>
+        <div class="col-auto">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">Số lượng đơn thức:</div>
+            </div>
+            <input
+              type="number"
+              value="5"
+              class="form-control"
+              id="sl1"
+              placeholder=""
+            />
+          </div>
         </div>
-        <div class="form-row align-items-center mt-2">
-            <span class="badge badge-secondary">Đa thức 1</span>
-            <div class="col-auto">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Số lượng đơn thức: </div>
-                    </div>
-                    <input type="number" value=5 class="form-control" id="sl1" placeholder="">
-                </div>
+        <div class="col-auto">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">Bậc nhỏ nhất:</div>
             </div>
-            <div class="col-auto">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Bậc nhỏ nhất: </div>
-                    </div>
-                    <input type="number" value=-10 class="form-control" id="min1" placeholder="">
-                </div>
-            </div>
-            <div class="col-auto">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Bậc lớn nhất:</div>
-                    </div>
-                    <input type="number" value=10 class="form-control" id="max1" placeholder="">
-                </div>
-            </div>
+            <input
+              type="number"
+              value="-10"
+              class="form-control"
+              id="min1"
+              placeholder=""
+            />
+          </div>
         </div>
-        <div class="form-row align-items-center mt-2">
-            <span class="badge badge-secondary">Đa thức 2</span>
-            <div class="col-auto">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Số lượng đơn thức: </div>
-                    </div>
-                    <input type="number" value=5 class="form-control" id="sl2" placeholder="">
-                </div>
+        <div class="col-auto">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">Bậc lớn nhất:</div>
             </div>
-            <div class="col-auto">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Bậc nhỏ nhất: </div>
-                    </div>
-                    <input type="number" value=-10 class="form-control" id="min2" placeholder="">
-                </div>
-            </div>
-            <div class="col-auto">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Bậc lớn nhất:</div>
-                    </div>
-                    <input type="number" value=10 class="form-control" id="max2" placeholder="">
-                </div>
-            </div>
+            <input
+              type="number"
+              value="10"
+              class="form-control"
+              id="max1"
+              placeholder=""
+            />
+          </div>
         </div>
-        <div class="form-row align-items-center mt-2">
-            <div class="col-auto">
-                <input type="file" class="custom-file-input" id="importFile" onchange="docFile()">
-                <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
-                <div class="invalid-feedback">Example invalid custom file feedback</div>
+      </div>
+      <div class="form-row align-items-center mt-2">
+        <span class="badge badge-secondary">Đa thức 2</span>
+        <div class="col-auto">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">Số lượng đơn thức:</div>
             </div>
-            <div class="row ml-2">
-                <button type="button" class="btn btn-outline-primary" id="randomGenerate" onclick="KhoiTaoDaThuc()">Khởi tạo đa thức</button>
-                <button type="button" class="btn btn-outline-secondary ml-2" onclick="LinkedList()">Linked List</button>
-                <button type="button" class="btn btn-outline-success ml-2" onclick="Heap()">Heap</button>
-                <button type="button" class="btn btn-outline-danger ml-2" onclick="HashTable()">Hash Table</button>
-                <button type="button" class="btn btn-outline-danger ml-2" onclick="ReplayHashTable()">Replay Hash Table</button>
-                <button type="button" class="btn btn-outline-danger ml-2" onclick="ExportTxt()">Export txt</button>
-                <button type="button" class="btn btn-outline-danger ml-2" onclick="ExportMulti(100)">Export Batch</button>
-            </div>
-            
+            <input
+              type="number"
+              value="5"
+              class="form-control"
+              id="sl2"
+              placeholder=""
+            />
+          </div>
         </div>
-        <div class="form-row align-items-center mt-2">
-            <div class="col-auto">
-                <input type="file" class="custom-file-input" id="batch1" onchange="docFileBatch(1)">
-                <label class="custom-file-label" for="validatedCustomFile">File 1</label>
-                <div class="invalid-feedback">Example invalid custom file feedback</div>
+        <div class="col-auto">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">Bậc nhỏ nhất:</div>
             </div>
-            <div class="col-auto ml-2">
-                <input type="file" class="custom-file-input" id="batch2" onchange="docFileBatch(2)">
-                <label class="custom-file-label" for="validatedCustomFile">File 2</label>
-                <div class="invalid-feedback">Example invalid custom file feedback</div>
-            </div>
-            <div class="row ml-2">
-                <button type="button" class="btn btn-outline-primary" id="randomGenerate" onclick="CaculateBatch()">Batch</button>
-            </div>
+            <input
+              type="number"
+              value="-10"
+              class="form-control"
+              id="min2"
+              placeholder=""
+            />
+          </div>
         </div>
-        
+        <div class="col-auto">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">Bậc lớn nhất:</div>
+            </div>
+            <input
+              type="number"
+              value="10"
+              class="form-control"
+              id="max2"
+              placeholder=""
+            />
+          </div>
+        </div>
+      </div>
+      <div class="form-row align-items-center mt-2">
+        <div class="col-auto">
+          <input
+            type="file"
+            class="custom-file-input"
+            id="importFile"
+            onchange="docFile()"
+          />
+          <label class="custom-file-label" for="validatedCustomFile"
+            >Choose file...</label
+          >
+          <div class="invalid-feedback">
+            Example invalid custom file feedback
+          </div>
+        </div>
+        <div class="row ml-2">
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            id="randomGenerate"
+            onclick="KhoiTaoDaThuc()"
+          >
+            Khởi tạo đa thức
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-secondary ml-2"
+            onclick="handleLinkedList()"
+          >
+            Linked List
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-success ml-2"
+            onclick="Heap()"
+          >
+            Heap
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-danger ml-2"
+            onclick="HashTable()"
+          >
+            Hash Table
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-danger ml-2"
+            onclick="ReplayHashTable()"
+          >
+            Replay Hash Table
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-danger ml-2"
+            onclick="ExportTxt()"
+          >
+            Export txt
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-danger ml-2"
+            onclick="ExportMulti(100)"
+          >
+            Export Batch
+          </button>
+        </div>
+      </div>
+      <div class="form-row align-items-center mt-2">
+        <div class="col-auto">
+          <input
+            type="file"
+            class="custom-file-input"
+            id="batch1"
+            onchange="docFileBatch(1)"
+          />
+          <label class="custom-file-label" for="validatedCustomFile"
+            >File 1</label
+          >
+          <div class="invalid-feedback">
+            Example invalid custom file feedback
+          </div>
+        </div>
+        <div class="col-auto ml-2">
+          <input
+            type="file"
+            class="custom-file-input"
+            id="batch2"
+            onchange="docFileBatch(2)"
+          />
+          <label class="custom-file-label" for="validatedCustomFile"
+            >File 2</label
+          >
+          <div class="invalid-feedback">
+            Example invalid custom file feedback
+          </div>
+        </div>
+        <div class="row ml-2">
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            id="randomGenerate"
+            onclick="CaculateBatch()"
+          >
+            Batch
+          </button>
+        </div>
+      </div>
     </div>
     <div class="row">
-        <div class=" col-lg-8">
-            <div class="form-row align-items-center mt-2">
-                <div id="dathuc1" style="font-size: 48pt;">
-                </div>
-            </div>
-            <div class="form-row align-items-center mt-2">
-                <div id="dathuc2" style="font-size: 48pt;">
-                </div>
-            </div>
-            <div class="form-row align-items-center mt-2" style="border-top: 1px solid black;">
-                <div id="dathuc_ketqua" style="font-size: 48pt;">
-                </div>
-            </div>
+      <div class="col-lg-8">
+        <div class="form-row align-items-center mt-2">
+          <div id="dathuc1" style="font-size: 48pt"></div>
         </div>
-        <div class=" col-lg-2">
-            <table>
-                <tbody id="result-table">
-                    <tr>
-                        <th>Key</th>
-                        <th>Value</th>
-                    </tr>
-                    <!-- <tr class="high-light">
+        <div class="form-row align-items-center mt-2">
+          <div id="dathuc2" style="font-size: 48pt"></div>
+        </div>
+        <div
+          class="form-row align-items-center mt-2"
+          style="border-top: 1px solid black"
+        >
+          <div id="dathuc_ketqua" style="font-size: 48pt"></div>
+        </div>
+      </div>
+      <div class="col-lg-2">
+        <table>
+          <tbody id="result-table">
+            <tr>
+              <th>Key</th>
+              <th>Value</th>
+            </tr>
+            <!-- <tr class="high-light">
                         <td class="key" id="key">0</td>
                         <td class="value" id="value">12</td>
                     </tr> -->
-                </tbody>
-            </table>
-        </div>
-        <div class=" col-lg-2">
-            <table>
-                <tbody id="log-table">
-                    <tr>
-                        <th>Log</th>
-                    </tr>
-                    <!-- <tr class="high-light">
+          </tbody>
+        </table>
+      </div>
+      <div class="col-lg-2">
+        <table>
+          <tbody id="log-table">
+            <tr>
+              <th>Log</th>
+            </tr>
+            <!-- <tr class="high-light">
                         <td class="key" id="key">0</td>
                         <td class="value" id="value">12</td>
                     </tr> -->
-                </tbody>
-            </table>
-        </div>
+          </tbody>
+        </table>
+      </div>
     </div>
     <div class="row">
-        <canvas id="myChart"></canvas>
+      <canvas id="myChart"></canvas>
     </div>
-</body>
-
+  </body>
 </html>
