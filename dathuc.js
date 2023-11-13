@@ -42,7 +42,7 @@ function KhoiTaoDaThuc() {
   const max_dt1 = document.getElementById("max1").value;
   heso_dt1 = randomUniqueArray(length_dt1, min_dt1, max_dt1);
   bac_dt1 = randomUniqueArray(length_dt1, min_dt1, max_dt1);
-  const string_dt1 = VeDaThuc(bac_dt1, heso_dt1, length_dt1);
+  const string_dt1 = VeDaThuc(bac_dt1, heso_dt1, length_dt1, 'dt1');
   document.getElementById("dathuc1").innerHTML = string_dt1;
 
   console.log("---------------");
@@ -51,13 +51,14 @@ function KhoiTaoDaThuc() {
   const max_dt2 = document.getElementById("max2").value;
   heso_dt2 = randomUniqueArray(length_dt2, min_dt2, max_dt2);
   bac_dt2 = randomUniqueArray(length_dt2, min_dt2, max_dt2);
-  const string_dt2 = VeDaThuc(bac_dt2, heso_dt2, length_dt2);
+  const string_dt2 = VeDaThuc(bac_dt2, heso_dt2, length_dt2, 'dt2');
   document.getElementById("dathuc2").innerHTML = string_dt2;
 }
 
-function VeDaThuc(array_bac, array_heso, length) {
+function VeDaThuc(array_bac, array_heso, length, id_mark = "") {
   let string_dathuc = "";
   for (let i = 0; i < length; i++) {
+    string_dathuc += `<span id="${id_mark}_${i}" class="donthuc">`
     if (array_heso[i] > 0) {
       string_dathuc += "+" + array_heso[i];
     } else {
@@ -67,6 +68,7 @@ function VeDaThuc(array_bac, array_heso, length) {
     if (array_bac[i] != 0) {
       string_dathuc += "x" + `<SUP><SMALL>${array_bac[i]}</SMALL></SUP>`;
     }
+    string_dathuc += `</span>`
   }
   return string_dathuc;
 }
@@ -118,10 +120,10 @@ function StringDT(array_bac, array_heso) {
       } else {
         string_dathuc = string_dathuc.concat(
           "(" +
-            array_heso[i] +
-            "x" +
-            (array_bac[i] != 0 ? "^" + array_bac[i] : "") +
-            ")"
+          array_heso[i] +
+          "x" +
+          (array_bac[i] != 0 ? "^" + array_bac[i] : "") +
+          ")"
         );
       }
     }
@@ -175,12 +177,12 @@ function generateFromFile(content) {
 
   heso_dt1 = tachdt1["array_heso"];
   bac_dt1 = tachdt1["array_bac"];
-  const string_dt1 = VeDaThuc(bac_dt1, heso_dt1, heso_dt1.length);
+  const string_dt1 = VeDaThuc(bac_dt1, heso_dt1, heso_dt1.length, "dt1");
   document.getElementById("dathuc1").innerHTML = string_dt1;
 
   heso_dt2 = tachdt2["array_heso"];
   bac_dt2 = tachdt2["array_bac"];
-  const string_dt2 = VeDaThuc(bac_dt2, heso_dt2, heso_dt2.length);
+  const string_dt2 = VeDaThuc(bac_dt2, heso_dt2, heso_dt2.length, "dt2");
   document.getElementById("dathuc2").innerHTML = string_dt2;
 }
 
@@ -453,11 +455,25 @@ function HashTable() {
 }
 
 async function ReplayHashTable() {
+
+  var classmark = "dt1"
+  var idmark = 0
+  var numdt1 = bac_dt1.length
+
   for (let i = 0; i < replay.length; i++) {
+    document.getElementById(classmark + "_" + idmark).classList.add("red-mark")
+
     let value = replay[i];
     console.log(value.action);
+    WriteLog(`<b>Xét đơn thức thứ ${i + 1}</b>`)
+    scrollLog()
+    await sleep(2000);
+    WriteLog(`Tìm kiếm key = ${value.bac} trong bảng kết quả`)
+    scrollLog()
+    await sleep(2000);
     if (value.action == "add") {
-      WriteLog(`Thêm phần tử key = ${value.bac}; value=${value.heso}`);
+      WriteLog(`Không tìm thấy, Thêm phần tử key = ${value.bac}; value=${value.heso}`);
+      scrollLog()
       let html = `
                 <tr id="bac_${value.bac}" class="high-light">
                     <td class="${value.bac}" >${value.bac}</td>
@@ -465,28 +481,43 @@ async function ReplayHashTable() {
                 </tr>
             `;
       document.getElementById("result-table").innerHTML += html;
-      await sleep(1000);
+      await sleep(2000);
       document
         .getElementById(`bac_${value.bac}`)
         .classList.remove("high-light");
     } else {
+      WriteLog(`Tìm thấy, Cộng thêm value=${value.heso} vào phần tử có key=${value.bac}`);
+      scrollLog()
       document.getElementById(`bac_${value.bac}`).classList.add("high-light");
-      await sleep(1000);
+      await sleep(2000);
       if (value.heso < 0) {
         document.getElementById(`heso_bac${value.bac}`).innerHTML += value.heso;
       } else {
         document.getElementById(`heso_bac${value.bac}`).innerHTML +=
           "+" + value.heso;
       }
-      await sleep(1000);
+      await sleep(2000);
+
       document
         .getElementById(`bac_${value.bac}`)
         .classList.remove("high-light");
+
+
+
     }
-    await sleep(1000);
+    document.getElementById(classmark + "_" + idmark).classList.remove("red-mark")
+    idmark += 1
+    if (i == numdt1 - 1) {
+      idmark = 0
+      classmark = "dt2"
+    }
+    await sleep(2000);
   }
 }
-
+function scrollLog() {
+  var objDiv = document.getElementById("log-area");
+  objDiv.scrollTop = objDiv.scrollHeight;
+}
 function WriteLog(text) {
   let html = `
         <tr>
