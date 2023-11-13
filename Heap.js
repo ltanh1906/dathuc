@@ -5,8 +5,15 @@ class DaThucHeap {
 
     // Thêm một đơn thức
     addDonThuc(bac, heso) {
-        this.heap.push({ bac, heso });
-        this.heapifyUp(this.heap.length - 1);
+        const newDonThuc = { bac, heso };
+        const existingIndex = this.heap.findIndex((donThuc) => donThuc.bac === bac);
+
+        if (existingIndex !== -1) {
+            this.heap[existingIndex].heso += heso;
+        } else {
+            this.heap.push(newDonThuc);
+            this.heapifyUp(this.heap.length - 1);
+        }
     }
 
     // Hàm để tái cân bằng Heap sau khi thêm một đơn thức
